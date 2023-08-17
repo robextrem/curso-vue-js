@@ -18,7 +18,7 @@ export default{
 </script>
 <template>
   <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-  <div class="container-fluid">
+  <div class="container">
     <a class="navbar-brand" href="#">Veterinaria</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
