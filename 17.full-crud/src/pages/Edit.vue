@@ -35,7 +35,7 @@ export default{
           edad:this.edad
         }
       })
-      this.$router.push({name:'mascota'})
+      this.$router.push({name:'mascotas'})
     },
     getMascota:async function(){
       const response = await axios({
