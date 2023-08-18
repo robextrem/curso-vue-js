@@ -9,15 +9,17 @@ export default{
       especie:"",
       razas:[],
       edad:0,
+      isLoading:false,
       submitted:false
     }
   },
   methods:{
-    crearMascota:function(){
+    crearMascota:async function(){
       const url = `${import.meta.env.VITE_APP_URL}/mascotas`
 
       this.submitted=true
-      axios({
+      this.isLoading=true
+      await axios({
         "method":"post",
         "url": url,
         "data":{
@@ -28,6 +30,7 @@ export default{
           "especie": this.especie
         }
       })
+      // this.isLoading=false
       this.$router.push({name:'mascotas'})
 
     }
@@ -65,19 +68,19 @@ export default{
 </script>
 <template>
   <div class="container">
-    <h1>Ingresa tu mascota</h1>
+    <h1 class="mt-4 mb-4">Ingresa tu mascota</h1>
     <form @submit.prevent="crearMascota">
       <div class="mb-3">
         <label class="form-label">Nombre</label>
-        <input class="form-control" type="text" v-model="nombre" name="nombre" placeholder="Ingresa aqui el nombre">
+        <input class="form-control" required type="text" v-model="nombre" name="nombre" placeholder="Ingresa aqui el nombre">
       </div>
       <div class="mb-3">
         <label class="form-label">Email del dueño</label>
-        <input class="form-control" type="text" v-model="email" name="email" placeholder="Ingresa aqui el email">
+        <input class="form-control" required type="text" v-model="email" name="email" placeholder="Ingresa aqui el email">
       </div>
       <div class="mb-3">
         <label class="form-label">Tipo de Animal</label>
-        <select class="form-select" name="tipo" v-model="tipo">
+        <select class="form-select" required name="tipo" v-model="tipo">
           <option value="">Selecciona el tipo</option>
           <option>Perro</option>
           <option>Gato</option>
@@ -87,15 +90,18 @@ export default{
       </div>
       <div v-if="razas.length>0" class="mb-3">
         <label class="form-label">Raza</label>
-        <select class="form-select" name="tipo" v-model="especie">
+        <select class="form-select" required name="tipo" v-model="especie">
           <option v-for="(raza, n) in razas">{{raza}}</option>
         </select>
       </div>
       <div class="mb-3">
         <label class="form-label">Edad</label>
-        <input class="form-control" type="number" v-model="edad" name="edad" placeholder="Ingresa aqui la edad">
+        <input class="form-control" required type="number" v-model="edad" name="edad" placeholder="Ingresa aqui la edad">
       </div>
-      <button type="submit" class="btn btn-primary mb-3">Enviar</button>
+      <button type="submit" class="btn btn-primary mb-3">
+        <span v-if="isLoading" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+        Enviar
+      </button>
     </form>
     <div v-if="submitted" class="alert alert-success" role="alert">
       Se ha creado un registro!

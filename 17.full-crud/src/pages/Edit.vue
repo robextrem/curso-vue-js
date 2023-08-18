@@ -82,7 +82,7 @@ export default{
 </script>
 <template>
   <div class="container">
-    <h1>Edita tu mascota</h1>
+    <h1 class="mt-4 mb-4">Edita tu mascota</h1>
     <form @submit.prevent="actualizarMascota">
       <div class="mb-3">
         <label class="form-label">Nombre</label>

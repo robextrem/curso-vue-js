@@ -15,11 +15,11 @@ const routes = [
         component: List
     },
     {
-        path:'/mascota/:id',
+        path:'/mascota/:id/:error?',
         name:'mascota-edit',
         component: Edit,
         props:true
-    }
+    },
 ]
 
 const history = createWebHistory()
