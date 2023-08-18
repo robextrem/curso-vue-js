@@ -1,5 +1,7 @@
 <script>
 import axios from 'axios';
+import SimpleVueValidation from 'simple-vue-validator'
+
 export default{
   props:{
     id:{
@@ -8,6 +10,7 @@ export default{
   },
   data:function(){
     return{
+      Validator:null,
       nombre:"",
       tipo:"",
       email:"",
@@ -17,25 +20,44 @@ export default{
       submitted:false
     }
   },
+  validators:{
+    nombre: function(value){
+      return this.Validator.value(value).required()
+    },
+    email: function(value){
+      return this.Validator.value(value).required().email()
+    },
+    tipo: function(value){
+      return this.Validator.value(value).required()
+    }
+  },
   beforeMount:function(){
+    this.Validator = SimpleVueValidation.Validator
     this.getMascota()
   },
   methods:{
     actualizarMascota:function(){
-      const url = `${import.meta.env.VITE_APP_URL}/mascotas/${this.id}`
-      this.submitted=true
-      axios({
-        url:url,
-        method:'put',
-        data:{
-          nombre:this.nombre,
-          tipo:this.tipo,
-          email:this.email,
-          especie:this.especie,
-          edad:this.edad
+      this.$validate()
+        .then((success) => {
+          if(success){
+            const url = `${import.meta.env.VITE_APP_URL}/mascotas/${this.id}`
+            this.submitted=true
+            axios({
+              url:url,
+              method:'put',
+              data:{
+                nombre:this.nombre,
+                tipo:this.tipo,
+                email:this.email,
+                especie:this.especie,
+                edad:this.edad
+              }
+            })
+            this.$router.push({name:'mascotas'})
+        }else{
+            console.log("No es necesario, pero hubo error en la validacion")
         }
       })
-      this.$router.push({name:'mascotas'})
     },
     getMascota:async function(){
       const response = await axios({
@@ -88,9 +110,15 @@ export default{
         <label class="form-label">Nombre</label>
         <input class="form-control" type="text" v-model="nombre" name="nombre" placeholder="Ingresa aqui el nombre">
       </div>
+      <div v-if="validation.hasError('nombre')" class="alert alert-danger" role="alert">
+        Ingresa tu nombre por favor
+      </div>
       <div class="mb-3">
         <label class="form-label">Email del dueño</label>
         <input class="form-control" type="text" v-model="email" name="email" placeholder="Ingresa aqui el email">
+      </div>
+      <div v-if="validation.hasError('email')" class="alert alert-danger" role="alert">
+        Ingresa tu email por favor
       </div>
       <div class="mb-3">
         <label class="form-label">Tipo de Animal</label>
