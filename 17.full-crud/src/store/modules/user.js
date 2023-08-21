@@ -16,6 +16,9 @@ export const useUserStore = defineStore('user',{
                 }
             }
             return this.user
+        },
+        logout(){
+            this.user=null
         }
     },
     getters:{

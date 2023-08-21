@@ -1,6 +1,11 @@
 <script>
-import router from '../router';
+import {useUserStore} from '../store/modules/user'
+
 export default{
+  setup(){
+    const userStore = useUserStore()
+    return {userStore}
+  },
   data: function(){
     return{
       item:"mascotas"
@@ -13,6 +18,12 @@ export default{
       else if(to.name=="mascota-create")
       this.item="mascota-create"
     }
+  },
+  methods:{
+    logOut:function(){
+      this.userStore.logout()
+      this.$router.push({name:"login"})
+    }
   }
 }
 </script>
@@ -24,7 +35,7 @@ export default{
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul v-if="userStore.getUser" class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <router-link class="nav-link" :class="{'active':item=='mascotas'}" to="/mascotas">Mascotas</router-link>
         </li>
@@ -34,6 +45,7 @@ export default{
         </li>
       </ul>
     </div>
+    <button v-if="userStore.getUser" @click="logOut" class="btn d-flex btn-warning" type="submit">Cerrar sesión</button>
   </div>
 </nav>
 </template>
